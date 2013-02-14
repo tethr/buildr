@@ -4,6 +4,7 @@ from setuptools import find_packages
 VERSION = '0.1dev'
 
 requires = [
+    'fabric',
 ]
 
 setup(name='portl',
