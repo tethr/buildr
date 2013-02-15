@@ -6,14 +6,25 @@ from fabric.network import disconnect_all
 
 USER = 'buildr'
 BUILDSDIR = '/home/buildr/builds'
-BUILD_SERVERS = ['localhost']
-
+BUILD_SERVERS = ['192.168.2.110']
 
 do = fab.run
+
+def which(what):
+    return do('which %s' % what, warn_only=True).succeeded
+
 
 class Build(object):
     commit = 'master'
     system_packages = []
+    build_packages = []
+    global_build_packages = [
+        'gcc',
+        'git',
+        'make',
+        'python-virtualenv',
+        'rubygems'
+    ]
 
     def __init__(self, name):
         self.name = name
@@ -23,6 +34,12 @@ class Build(object):
 
     @fab.roles('build_servers')
     def build(self):
+        fab.sudo('apt-get update -qq')
+        fab.sudo('apt-get upgrade -qq')
+        for pkg in self.global_build_packages + self.build_packages:
+            fab.sudo('apt-get install -qq %s' % pkg)
+        if not which('fpm'):
+            fab.sudo('gem install fpm')
         do('rm -rf %s' % self.build_dir)
         do('mkdir -p %s' % self.build_dir)
         do('virtualenv %s' % self.venv)
