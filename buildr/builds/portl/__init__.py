@@ -15,4 +15,6 @@ class PortlBuild(Build):
         '/usr/lib/python2.7/dist-packages/gobject/']
     run_packages = [
         'network-manager',
-        'python-gobject']
+        'python-gobject',
+        'supervisor'
+    ]

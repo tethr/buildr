@@ -11,6 +11,13 @@ BUILD_SERVERS = ['192.168.2.106']
 
 do = fab.run
 
+HOOKS = [
+    ('--before-remove', 'prerm.sh'),
+    ('--after-remove', 'postrm.sh'),
+    ('--before-install', 'preinst.sh'),
+    ('--after-install', 'postinst.sh')]
+
+
 def which(what):
     return do('which %s' % what, warn_only=True).succeeded
 
@@ -26,9 +33,6 @@ class Build(object):
         'python-virtualenv',
         'rubygems']
     run_packages = []
-    global_run_packages = [
-        'python-virtualenv'
-    ]
     global_run_packages = [
         'python-virtualenv'
     ]
@@ -112,8 +116,18 @@ class Build(object):
                 do("sed -i -e's|%s|%s|' %s" % (
                     old_shebang, new_shebang, script))
 
+        # Copy packaging hooks
+        hooks = []
+        for opt, fname in HOOKS:
+            if pkg_resources.resource_exists(self.__module__, fname):
+                hooks.append(opt)
+                src = pkg_resources.resource_filename(self.__module__, fname)
+                dst = os.path.join(self.root, fname)
+                fab.put(src, dst)
+                hooks.append(dst)
+
         # Create a .deb for the whole mess
-        hooks = ''
+        hooks = ' '.join(hooks)
         deps = '-d ' + ' -d '.join(self.run_packages + self.global_run_packages)
         with fab.cd(self.root):
             do('fpm -s dir -t deb -n {0.name} -v {0.version} -x "*.git" '
