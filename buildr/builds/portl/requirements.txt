@@ -19,7 +19,6 @@ lingua==1.4
 nose==1.2.1
 peppercorn==0.4
 polib==1.0.3
--e portl/
 py==1.4.12
 pyramid==1.4
 pyramid-layout==0.7

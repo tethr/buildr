@@ -2,6 +2,7 @@ from ...build import Build
 
 
 class PortlBuild(Build):
+    version = '0.1dev'
     git_url = 'git://github.com/tethr/portl.git'
     build_packages = [
         'libevent-dev',
@@ -12,3 +13,6 @@ class PortlBuild(Build):
         '/usr/lib/python2.7/dist-packages/_dbus_glib_bindings.so',
         '/usr/lib/python2.7/dist-packages/glib/',
         '/usr/lib/python2.7/dist-packages/gobject/']
+    run_packages = [
+        'network-manager',
+        'python-gobject']

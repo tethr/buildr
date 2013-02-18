@@ -10,12 +10,12 @@ server.
 Setting up a Build Server
 -------------------------
 
-The basic requirement for a build server is that it have a user, `buildr`, with
-home directory `/home/buildr`.  The person running the build script must have
-ssh key access to `buildr@<buildserver>`.  The `buildr` user on the build server
-must have sudo access without having to enter a password.  Beyond that, a build
-server must be in the list of build servers specified in `buildr/build.py` in 
-this repository.
+The basic requirement for a build server is that it have a user, `buildr`, and
+a directory, `/home/buildr`, owned by `buildr`.  The person running the build
+script must have ssh key access to `buildr@<buildserver>`.  The `buildr` user
+on the build server must have sudo access without having to enter a password.
+Beyond that, a build server must be in the list of build servers specified in
+`buildr/build.py` in this repository.
 
 Setting up buildr
 -----------------
